@@ -47,7 +47,16 @@
       document.getElementById("timer").innerHTML =  seconds_to_minutes(this.CurrentTime);
 
       if (this.CurrentTime == 0){
-        this.Stop();
+        this.Reset();
+        
+        var li = document.createElement('li');
+        li.className = "list-group-item";
+        li.appendChild(document.createTextNode(document.getElementById("purpose").value));
+        var list = document.getElementById("previous_runs");
+
+        list.appendChild(li);
+        document.getElementById("purpose").innerHTML = "";
+
       }
     }
 
@@ -58,6 +67,10 @@
     this.Start = function(){
       this.Enable = new Boolean(true);
       thisObject = this;
+      if (!document.getElementById("purpose").value.match(/\S/)){
+        alert("Please insert a purpose for this cycle");
+        return;
+      } 
 
       if(thisObject.Enable){
         thisObject.timerId = setInterval(
@@ -83,23 +96,28 @@
 
   var timer = new CountdownTimer();
   
-
   </script>
 
   <body>
     <div class="Container">
       <div class="jumbotron text-center">
         <h1> Timer </h1>
-      </div>
-      <div Class="panel panel-default text-center">
-        <div id="timer" class="timer">25:00</div>
-      </div>
       <div class="row text-center">
+        <div id="timer" class="timer">25:00</div>
         <p>
-          <a class="btn btn-primary" onclick=timer.Start() role="button">Start</a>
-          <a class="btn btn-primary" onclick=timer.Pause() role="button">Stop</a>
-          <a class="btn btn-primary" onclick=timer.Reset() role="button">Reset</a>
+          <button type="button" onclick=timer.Start() class="btn btn-success"> Start </button>
+          <button type="button" onclick=timer.Pause() class="btn btn-danger"> Pause </button>
+          <button type="button" onclick=timer.Reset() class="btn btn-warning"> Reset </button>
         </p>
+    </div>
+      </div>
+        <div class="form-group">
+          <label for="purpose">Purpose for this cycle:</label>
+          <input type="text" class="form-control" id="purpose">
+        </div>
+    Previous Runs:
+    <ul class="list-group" id="previous_runs">
+    </ul>
   </div>
   </body>
 </html>
