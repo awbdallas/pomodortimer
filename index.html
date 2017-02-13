@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+
+<style>
+.timer {
+  font-size:50px;
+  color: black;
+}
+</style>
+
+
+<html>
+  <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="./node_modules/jquery/dist/jquery.min.js"></script>
+
+  <script>
+  
+  function seconds_to_minutes (seconds){
+    var minutes = Math.floor(seconds / 60);
+    var seconds = Math.floor(seconds % 60);
+    var time = "";
+
+
+    if (minutes < 10){
+      minutes = "0" + minutes;
+    } 
+
+    if (seconds < 10){
+      seconds = "0" + seconds;
+    }
+
+    time = minutes + ":" + seconds;
+
+    return time;
+  }
+
+  var CountdownTimer = function(){
+
+    this.Interval = 1000;
+    this.Enable = new Boolean(false);
+
+    this.StartTime = 1500;
+    this.CurrentTime = 1500;
+
+    this.Tick = function(){
+      this.CurrentTime = this.CurrentTime - 1;
+      document.getElementById("timer").innerHTML =  seconds_to_minutes(this.CurrentTime);
+
+      if (this.CurrentTime == 0){
+        this.Stop();
+      }
+    }
+
+    var timerId = 0;
+
+    var thisObject;
+
+    this.Start = function(){
+      this.Enable = new Boolean(true);
+      thisObject = this;
+
+      if(thisObject.Enable){
+        thisObject.timerId = setInterval(
+          function(){
+            thisObject.Tick();
+          }, thisObject.Interval);
+      }
+    };
+
+    this.Pause = function(){
+      thisObject.Enable = new Boolean(false);
+      clearInterval(thisObject.timerId);
+    };
+
+    this.Reset = function(){
+      thisObject.Enable = new Boolean(false);
+      clearInterval(thisObject.timerId);
+      this.CurrentTime = this.StartTime;
+      document.getElementById("timer").innerHTML =  seconds_to_minutes(this.CurrentTime);
+      
+    };
+  };
+
+  var timer = new CountdownTimer();
+  
+
+  </script>
+
+  <body>
+    <div class="Container">
+      <div class="jumbotron text-center">
+        <h1> Timer </h1>
+      </div>
+      <div Class="panel panel-default text-center">
+        <div id="timer" class="timer">25:00</div>
+      </div>
+      <div class="row text-center">
+        <p>
+          <a class="btn btn-primary" onclick=timer.Start() role="button">Start</a>
+          <a class="btn btn-primary" onclick=timer.Pause() role="button">Stop</a>
+          <a class="btn btn-primary" onclick=timer.Reset() role="button">Reset</a>
+        </p>
+  </div>
+  </body>
+</html>
