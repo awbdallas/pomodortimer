@@ -47,16 +47,20 @@
       document.getElementById("timer").innerHTML =  seconds_to_minutes(this.CurrentTime);
 
       if (this.CurrentTime == 0){
-        this.Reset();
+
+        var alert_music = new Audio('resources/SynthChime11.mp3'); 
+        alert("This cycle over.\n\nSound Effects by Eric Matyas");
         
-        var li = document.createElement('li');
-        li.className = "list-group-item";
-        li.appendChild(document.createTextNode(document.getElementById("purpose").value));
-        var list = document.getElementById("previous_runs");
+        var date = new Date();
 
-        list.appendChild(li);
-        document.getElementById("purpose").innerHTML = "";
+        var table = document.getElementById("previous_runs");
+        var row = table.insertRow(table.rows.length);
 
+        row.insertCell(0).innerHTML = document.getElementById("purpose").value;
+        row.insertCell(1).innerHTML = this.StartDate;
+        row.insertCell(2).innerHTML = date.getHours() +":" + date.getMinutes() + ":" + date.getSeconds();
+
+        this.Reset();
       }
     }
 
@@ -67,6 +71,9 @@
     this.Start = function(){
       this.Enable = new Boolean(true);
       thisObject = this;
+      var date = new Date();
+      this.StartDate = date.getHours() +":" + date.getMinutes() + ":" + date.getSeconds();
+
       if (!document.getElementById("purpose").value.match(/\S/)){
         alert("Please insert a purpose for this cycle");
         return;
@@ -90,6 +97,7 @@
       clearInterval(thisObject.timerId);
       this.CurrentTime = this.StartTime;
       document.getElementById("timer").innerHTML =  seconds_to_minutes(this.CurrentTime);
+      document.getElementById("purpose").value = "";
       
     };
   };
@@ -116,7 +124,15 @@
           <input type="text" class="form-control" id="purpose">
         </div>
     Previous Runs:
-    <ul class="list-group" id="previous_runs">
+    <table class="table table-bordered" id="previous_runs">
+      <thead>
+        <tr>
+          <th>Purpose</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+        </tr>
+      </thead>
+    </table>
     </ul>
   </div>
   </body>
